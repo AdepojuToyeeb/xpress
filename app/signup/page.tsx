@@ -4,11 +4,13 @@ import { Card } from "@/components/ui/card";
 import { useMultiStepForm } from "../../hooks/use-multi-step-form";
 import { StepOne } from "@/components/registration-form/step-one";
 import { StepTwo } from "@/components/registration-form/step-two";
-import { useState } from "react";
 import { PendingModal } from "@/components/pending-modal";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function SignupPage() {
+  const router = useRouter();
   const {
     step,
     formData,
@@ -17,6 +19,7 @@ export default function SignupPage() {
     nextStep,
     prevStep,
     submitForm,
+    isLoading,
     showPendingModal,
     setShowPendingModal,
   } = useMultiStepForm();
@@ -29,8 +32,12 @@ export default function SignupPage() {
       await submitForm();
     }
   };
-  const router = useRouter();
 
+  const handlePendingModalClose = () => {
+    setShowPendingModal(false);
+    router.push("/signin");
+    router.refresh();
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -65,12 +72,17 @@ export default function SignupPage() {
             <div className="flex gap-4 items-center pt-4">
               <div className="space-x-2">
                 {step === 2 && (
-                  <Button type="button" variant="outline" onClick={prevStep}>
+                  <Button
+                    disabled={isLoading}
+                    type="button"
+                    variant="outline"
+                    onClick={prevStep}
+                  >
                     Back
                   </Button>
                 )}
-                <Button size={"lg"} type="submit">
-                  {step === 1 ? "Next" : "Submit"}
+                <Button size={"lg"} type="submit" disabled={isLoading}>
+                  {step === 1 ? "Next" : isLoading ? "Submitting..." : "Submit"}
                 </Button>
               </div>
               <div className="text-sm text-[#808080]">Step {step} of 2</div>
@@ -80,10 +92,7 @@ export default function SignupPage() {
       </Card>
       <PendingModal
         isOpen={showPendingModal}
-        onClose={() => {
-          setShowPendingModal(false);
-          router.push("/signin");
-        }}
+        onClose={handlePendingModalClose}
       />
     </div>
   );

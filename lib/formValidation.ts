@@ -1,4 +1,4 @@
-import { BusinessFormData } from "@/types/form";
+import { BusinessFormData, SignInFormData } from "@/types/form";
 
 export const validateStep1 = (data: Partial<BusinessFormData>) => {
   const errors: Partial<Record<keyof BusinessFormData, string>> = {};
@@ -71,4 +71,20 @@ export const validateStep2 = (data: Partial<BusinessFormData>) => {
   }
 
   return errors;
+};
+
+export const validateLoginForm = (formData: Partial<SignInFormData>) => {
+  const newErrors: Partial<SignInFormData> = {};
+
+  if (!formData.email) {
+    newErrors.email = "Email is required";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    newErrors.email = "Invalid email format";
+  }
+
+  if (!formData.password) {
+    newErrors.password = "Password is required";
+  }
+
+  return newErrors;
 };

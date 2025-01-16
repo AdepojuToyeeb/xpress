@@ -13,6 +13,8 @@ const config: Config = {
       colors: {
         background: "hsl(var(--background))",
         pending: "#FF9900",
+        danger: "#FF0000",
+        success: "#27A713",
         primary: {
           DEFAULT: "#039BF0",
           foreground: "#1A1619",
@@ -24,6 +26,9 @@ const config: Config = {
         border: {
           DEFAULT: "#CCCCCC",
         },
+      },
+      boxShadow: {
+        custom: "0 -4px 12px 0 rgba(0,0,0,0.04)",
       },
       fontFamily: {
         sans: ["var(--font-inter)"],

@@ -30,7 +30,7 @@ export default function SignupLayout({
           </div>
         </div>
       </header>
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 flex flex-col justify-center items-center w-full">{children}</main>
     </div>
   );
 }

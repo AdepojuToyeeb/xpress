@@ -15,5 +15,9 @@ export interface BusinessFormData {
   password: string;
   confirmPassword: string;
 }
+export interface SignInFormData {
+  email: string;
+  password: string;
+}
 
 export type FormStep = 1 | 2;

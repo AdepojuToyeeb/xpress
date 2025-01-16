@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { BusinessFormData, FormStep } from "../types/form";
 import { validateStep1, validateStep2 } from "@/lib/formValidation";
+import { toast } from "sonner";
 
 export function useMultiStepForm() {
   const [step, setStep] = useState<FormStep>(1);
   const [showPendingModal, setShowPendingModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<BusinessFormData>({
     businessName: "",
     businessEmail: "",
@@ -31,7 +33,6 @@ export function useMultiStepForm() {
     value: string | File
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear error when field is updated
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
@@ -58,11 +59,29 @@ export function useMultiStepForm() {
   const prevStep = () => {
     setStep(1);
   };
+
   const submitForm = async () => {
     if (validateCurrentStep()) {
-      // Handle form submission
-      setShowPendingModal(true);
-      // Add your API call here
+      try {
+        setIsLoading(true);
+        const response = await fetch("/api/auth/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to sign up");
+        }
+
+        setShowPendingModal(true);
+      } catch (error) {
+        toast.error("Failed to sign up. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -75,6 +94,7 @@ export function useMultiStepForm() {
     prevStep,
     submitForm,
     showPendingModal,
+    isLoading,
     setShowPendingModal,
   };
 }
