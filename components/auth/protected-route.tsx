@@ -1,21 +1,26 @@
 "use client";
-
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isLoading } = useAuth();
-  const token = sessionStorage.getItem("token");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
+    // Check token only on the client side
+    const token =
+      typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
+
     if (!isLoading && !token) {
       router.push(`/signin?from=${encodeURIComponent(pathname)}`);
+    } else if (token) {
+      setIsAuthenticated(true); // Update authentication state if token exists
     }
-  }, [token, isLoading, router, pathname]);
-
+  }, [isLoading, router, pathname]);
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -26,7 +31,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!token) {
+  if (!isAuthenticated) {
     return null;
   }
 
