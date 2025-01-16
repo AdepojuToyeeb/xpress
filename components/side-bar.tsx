@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { UsersRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { NoteIcon } from "./ui/icons/note";

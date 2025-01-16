@@ -54,6 +54,7 @@ export default function SignInForm() {
         router.push(from);
         router.refresh();
       } catch (error) {
+        console.log(error)
         toast.error("Failed to sign in. Please try again.");
       } finally {
         setIsLoading(false);

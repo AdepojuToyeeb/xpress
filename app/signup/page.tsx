@@ -6,8 +6,6 @@ import { StepOne } from "@/components/registration-form/step-one";
 import { StepTwo } from "@/components/registration-form/step-two";
 import { PendingModal } from "@/components/pending-modal";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
 
 export default function SignupPage() {
   const router = useRouter();

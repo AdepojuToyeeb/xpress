@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { jwtVerify, SignJWT } from "jose";
-import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 
 const JWT_SECRET = new TextEncoder().encode(
@@ -19,6 +19,8 @@ export async function verifyToken(token: string) {
     const { payload } = await jwtVerify(token, JWT_SECRET);
     return payload;
   } catch (error) {
+    console.log(error);
+
     return null;
   }
 }
@@ -32,6 +34,7 @@ export async function getUser(request: NextRequest) {
     const payload = await verifyToken(token);
     return payload;
   } catch (error) {
+    console.log(error);
     return null;
   }
 }
